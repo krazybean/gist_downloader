@@ -1,0 +1,6 @@
+[username]
+first.last: 123438945449595405906004339 #auth token
+
+[github]
+host: github.enterprise.com
+user: first-last

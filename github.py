@@ -58,7 +58,6 @@ class Github:
         """ returns details of specific gist """
         headers = self.auth()
         req = requests.get(gist_url, headers=headers, verify=False)
-        print "Status Code: {0}".format(req.status_code)
         return req.json()
 
     def format_gist(self, gist):
@@ -78,13 +77,13 @@ class Github:
 
     def restructure(self):
         username = conf.git_user()['user']
-        print username
         list_of_gists = self.list_gists(username)
+        count = 0
         for gist in list_of_gists:
             gist_url = gist['url']
             output = self.get_gist(gist_url)
             files = self.format_gist(output)
-            print files
+            count += 1
 
 
 if __name__ == '__main__':

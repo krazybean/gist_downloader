@@ -45,14 +45,16 @@ class Github:
             repolist.append(repo)
         return repolist
 
-    def list_gists(self, username):
+    def list_gists(self, username, page=1, perpage=100):
         """ returns a list of gists under specified user """
         # GET /users/:username/gists
         headers = self.auth()
-        gist_uri = "/users/{0}/gists".format(username)
+        gist_uri = "/users/{0}/gists?page={1}&per_page={2}".format(username,
+                                                                   page,
+                                                                   perpage)
         url = "{0}{1}".format(self.api, gist_uri)
-        req = requests.get(url, headers=headers, verify=False)
-        return req.json()
+        req = requests.get(url, headers=headers, verify=False, timeout=3)
+        return req.headers, req.json()
 
     def get_gist(self, gist_url):
         """ returns details of specific gist """
@@ -77,7 +79,7 @@ class Github:
 
     def restructure(self):
         username = conf.git_user()['user']
-        list_of_gists = self.list_gists(username)
+        _, list_of_gists = self.list_gists(username)
         count = 0
         for gist in list_of_gists:
             gist_url = gist['url']
